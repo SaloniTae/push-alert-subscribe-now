@@ -17,13 +17,16 @@ export const NotificationSubscriber: React.FC = () => {
       if (window.OneSignal) {
         try {
           setServiceAvailable(true);
-          // Get the subscription state properly using OneSignal API
-          const state = await window.OneSignal.User.PushSubscription.getSubscriptionState();
-          setSubscriptionStatus(state.subscribed);
+          // Use the correct method to check if push notifications are enabled
+          const isEnabled = await window.OneSignal.isPushNotificationsEnabled();
+          console.log("OneSignal subscription status:", isEnabled);
+          setSubscriptionStatus(isEnabled);
         } catch (error) {
           console.error("Error checking OneSignal status:", error);
           setServiceAvailable(false);
         }
+      } else {
+        console.log("OneSignal is not available yet");
       }
     };
 
@@ -53,7 +56,7 @@ export const NotificationSubscriber: React.FC = () => {
     try {
       if (subscriptionStatus) {
         // Unsubscribe if already subscribed
-        await window.OneSignal.User.PushSubscription.optOut();
+        await window.OneSignal.setSubscription(false);
         setSubscriptionStatus(false);
         toast({
           title: "Unsubscribed",
@@ -61,7 +64,8 @@ export const NotificationSubscriber: React.FC = () => {
         });
       } else {
         // Subscribe if not already subscribed
-        await window.OneSignal.User.PushSubscription.optIn();
+        await window.OneSignal.registerForPushNotifications();
+        await window.OneSignal.setSubscription(true);
         setSubscriptionStatus(true);
         toast({
           title: "Subscribed",
