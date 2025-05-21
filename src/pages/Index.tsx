@@ -8,7 +8,7 @@ const Index = () => {
         <h1 className="text-4xl font-bold text-center mb-8">Push Notifications</h1>
         <NotificationSubscriber />
         <p className="text-center text-sm text-muted-foreground mt-8">
-          Powered by PushAlert.co
+          Powered by OneSignal
         </p>
       </div>
     </div>

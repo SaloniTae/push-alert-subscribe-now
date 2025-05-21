@@ -17,7 +17,8 @@
     <meta name="twitter:site" content="@lovable_dev" />
     <meta name="twitter:image" content="https://lovable.dev/opengraph-image-p98pqg.png" />
     
-    <!-- PushAlert -->
+    <!-- PushAlert (Commented out) -->
+    <!--
     <script type="text/javascript">
         (function(d, t) {
                 var g = d.createElement(t),
@@ -26,9 +27,11 @@
                 s.parentNode.insertBefore(g, s);
         }(document, "script"));
     </script>
+    -->
     <!-- End PushAlert -->
     
-    <!-- PushAlert -->
+    <!-- PushAlert (Commented out) -->
+    <!--
     <script type="text/javascript">
         (function(d, t) {
                 var g = d.createElement(t),
@@ -37,7 +40,24 @@
                 s.parentNode.insertBefore(g, s);
         }(document, "script"));
     </script>
+    -->
     <!-- End PushAlert -->
+    
+    <!-- OneSignal Web Push Notifications -->
+    <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
+    <script>
+      window.OneSignalDeferred = window.OneSignalDeferred || [];
+      OneSignalDeferred.push(async function(OneSignal) {
+        await OneSignal.init({
+          appId: "887203af-f02f-4a68-ad94-0214cdec4d4f",
+          safari_web_id: "web.onesignal.auto.336e9d4c-289f-452d-8560-a451da3453b9",
+          notifyButton: {
+            enable: true,
+          },
+        });
+      });
+    </script>
+    <!-- End OneSignal -->
   </head>
 
   <body>

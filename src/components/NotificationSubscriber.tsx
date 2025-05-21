@@ -4,7 +4,6 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Bell, BellOff } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import { isSubscribed, subscribeUser, unsubscribeUser, isPushAlertAvailable } from '@/services/pushAlertService';
 
 export const NotificationSubscriber: React.FC = () => {
   const [subscriptionStatus, setSubscriptionStatus] = useState<boolean>(false);
@@ -13,14 +12,14 @@ export const NotificationSubscriber: React.FC = () => {
   const { toast } = useToast();
 
   useEffect(() => {
-    // Check if PushAlert is available and if user is already subscribed
+    // Check if OneSignal is available and if user is already subscribed
     const checkStatus = () => {
-      const available = isPushAlertAvailable();
-      setServiceAvailable(available);
-      
-      if (available) {
-        const subscribed = isSubscribed();
-        setSubscriptionStatus(subscribed);
+      if (window.OneSignal) {
+        setServiceAvailable(true);
+        
+        window.OneSignal.isPushNotificationsEnabled().then((isEnabled: boolean) => {
+          setSubscriptionStatus(isEnabled);
+        });
       }
     };
 
@@ -50,7 +49,7 @@ export const NotificationSubscriber: React.FC = () => {
     try {
       if (subscriptionStatus) {
         // Unsubscribe if already subscribed
-        await unsubscribeUser();
+        await window.OneSignal.setSubscription(false);
         setSubscriptionStatus(false);
         toast({
           title: "Unsubscribed",
@@ -58,7 +57,8 @@ export const NotificationSubscriber: React.FC = () => {
         });
       } else {
         // Subscribe if not already subscribed
-        await subscribeUser();
+        await window.OneSignal.registerForPushNotifications();
+        await window.OneSignal.setSubscription(true);
         setSubscriptionStatus(true);
         toast({
           title: "Subscribed",
